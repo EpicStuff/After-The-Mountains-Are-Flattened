@@ -161,3 +161,9 @@ cython_debug/
 
 # vscode
 .vscode/
+
+# nicegui
+.nicegui/
+
+# custom
+test.py
