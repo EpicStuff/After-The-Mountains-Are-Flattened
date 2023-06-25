@@ -1,2 +1,2 @@
 # After-The-Mountains-Are-Flattened
-A After The Mountains Are Flattened webnovel inspired incremental game
+An After The Mountains Are Flattened web novel inspired incremental game
