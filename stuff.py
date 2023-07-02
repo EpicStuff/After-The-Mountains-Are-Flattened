@@ -1,9 +1,8 @@
-from typing import Any, Callable, Mapping, MutableMapping
-from functools import partial as wrap
-from math import e
-from nicegui.events import KeyEventArguments
-class Binder():
-	def __init__(self, target: MutableMapping) -> None:
+from typing import Any, Mapping, MutableMapping
+class Dict():
+	'''basically a dictionary but you can access the keys as attributes (with a dot instead of brackets))\\
+	you can also "bind" it to another `MutableMapping` object'''
+	def __init__(self, target: MutableMapping = {}) -> None:
 		self._target = target
 	def __getattr__(self, __name: str) -> Any:
 		if __name[0] == '_':
@@ -23,8 +22,8 @@ class Binder():
 		else:
 			for key, value in (__map | kwargs).items():
 				self._target.setdefault(key, value)
-class Dict(dict):
-	def __init__(self, __map: Mapping = {}, **kwargs) -> None:
-		self.__dict__.update(__map | kwargs)
-	def __repr__(self) -> str:
-		return self.__dict__.__repr__()
+# class Dict(dict):
+# 	def __init__(self, __map: Mapping = {}, **kwargs) -> None:
+# 		self.__dict__.update(__map | kwargs)
+# 	def __repr__(self) -> str:
+# 		return self.__dict__.__repr__()
