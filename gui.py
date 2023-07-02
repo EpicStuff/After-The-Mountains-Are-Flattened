@@ -65,16 +65,13 @@ class GUI():
 
 async def open_popup(pop: ui.dialog, text: str, but1: str, but2: Optional[str] = None) -> Any:
 	'sets the text of label and button then opens the popup'
-	# if 1 button popup is wanted
-	# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
 	pop.text.set_text(text)
 	pop.but1.set_text(but1)
+	# if second button is wanted
 	if but2 is not None:
 		pop.but2.set_text(but2)
 		pop.but2.set_visibility(True)
 	else:
 		pop.but2.set_visibility(False)
-	# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
 	pop.open()
-	# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
-	# return await pop
+	return await pop

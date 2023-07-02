@@ -53,9 +53,6 @@ def gain_xp(vol: 'str', i: GUI, xp: int = 1) -> None:
 		i.vars.levels[vol][level] = i.vars.max_xp[vol](level)
 	# increment xp
 	i.user.xp[vol] += xp / i.vars.levels[vol][level]
-	# # update bar
-	# i.elms.xp.set_value(get_xp(vol, i.user.xp))
-	# i.elms.xp.text.set_text(get_level(vol, i.user.xp))
 def handle_key(i: GUI, e: KeyEventArguments):
 	if e.modifiers.ctrl and e.action.repeat and e.key == 'c':
 		print('resetting progress')
@@ -64,38 +61,24 @@ def handle_key(i: GUI, e: KeyEventArguments):
 async def main(client: Client) -> None:
 	i = GUI(vars, default)
 	await client.connected()
-	# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
 
 	if i.user.vol == -1:
-		# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
 		await open_popup(i.elms.pop, m.story_0, 'Okay?')
-		# await i.elms.pop.but1.clicked()
-		# i.elms.pop.close()
-		await i.elms.pop
 		i.user.vol = 0
 
-	# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
 	i.set_vol_0()
-	# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
 	if i.user.vol == 0: vol_0(i)
 
-	# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
 
 def vol_0(i: GUI) -> None:
-	# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
 	i.elms.ticker = ui.timer(i.vars.tick_speed, wrap(gain_xp, i.vars.xp_showing, i))
 
 
 if __name__ in {"__main__", "__mp_main__"}:
 	# for debugging
-	import tracemalloc, colorama
+	import tracemalloc
 	tracemalloc.start()
-	from inspect import currentframe, getframeinfo
-	from colorama import just_fix_windows_console, Fore
-	just_fix_windows_console()
-	# end debugging
-	# print(Fore.RED, '--------------------------------------------STARTING--------------------------------------------', Fore.RESET)
 	json_filter('.nicegui/')
+
 	ui.run(dark=True, storage_secret='secret')
 	ui.open(main)
-	# print(Fore.BLUE, getframeinfo(currentframe()).filename.split('\\')[-1], getframeinfo(currentframe()).lineno, Fore.RESET)  # type: ignore
