@@ -4,16 +4,16 @@ events = {
 		'title': 'The Card',
 		'text': '''
 			"holy crap just agree already!!!! what's taking so long!! here’s the deal: if u get 1st in the 1v1, i won’t pull that card again."
-			The card,
+			The card, the climber's attention honed in on this.
 			The card!
-			What is the card? Long ago you've been helped out in a massive way. Since then, it'd been the reminders of this favour that'd motivated you to put up with all this nonsense.
-			In a way, this card is the last thing binding you. Once removed, it'd really be over...you'd be retired for good.
-			So that's the wager: first place in the minor tournament in exchange for eternal freedom, the warm bliss that lay beyond the mountain's frosty slopes.
-			you lean back to contemplate the offer.
+			What was the card? Long ago the frenemy had helped his family out in a massive way when the climber's mother had fallen ill. Since then, it'd been reminders of this favour that'd motivated the climber to put up with the frenemy's nonsense.
+			In a way, the card was the last thing binding them together. Once it was removed, it'd really be over...the climber would be retired for good.
+			So that was tonight's wager: first place in his own recruitment tournament in exchange for eternal freedom, the warm bliss that lay beyond the mountain's frosty slopes.
+			The climber, leaned back to contemplate the offer while, across from him, his long-time comrade feigned indifference sawing through a piece of pork.
 			The Card...
 			The Card...the Car—
 		''',
-		'buttons': ['What the heck, Deal!', 'No Way, had you not done enough?'],
+		'buttons': ['It was only two weeks, Deal!', 'Isnt\'t this underhanded scheming too much?'],
 	},
 }
 insights = {
