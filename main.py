@@ -1,5 +1,5 @@
+import mountains as m, random, asyncio
 from typing import Any
-import mountains as m
 from gui import GUI, ui, open_popup
 from functools import partial as wrap
 from math import e
@@ -19,7 +19,9 @@ vars: dict[str, Any] = {
 		'm': {},
 	},
 	'xp_showing': 's',
-	# 'zero': 1e-9,
+	'events': {},
+	'quests': {},
+	'insights': {},
 }
 default = {
 	'vol': -1,
@@ -28,6 +30,15 @@ default = {
 		'l': -1.1,
 		'm': 0,
 	},
+	'stats_unlocked': True,
+	'events_unlocked': True,
+	'events': {},
+	'quests_unlocked': True,
+	'quests': {},
+	'insights_unlocked': True,
+	'insights': {},
+	'dreams_unlocked': True,
+	'dreams': {},
 }
 
 def json_filter(folder: str = '.') -> None:
@@ -53,25 +64,57 @@ def gain_xp(vol: 'str', i: GUI, xp: int = 1) -> None:
 		i.vars.levels[vol][level] = i.vars.max_xp[vol](level)
 	# increment xp
 	i.user.xp[vol] += xp / i.vars.levels[vol][level]
-def handle_key(i: GUI, e: KeyEventArguments):
-	if e.modifiers.ctrl and e.action.repeat and e.key == 'c':
-		print('resetting progress')
-		i.user.update(default)
 @ui.page('/')
 async def main(client: Client) -> None:
 	i = GUI(vars, default)
 	await client.connected()
 
 	if i.user.vol == -1:
-		await open_popup(i.elms.pop, m.story_0, 'Okay?')
-		i.user.vol = 0
+		open_popup(i.elms.pop, m.story_0, 'Okay?')
+		await i.elms.pop
+		i.set_vol_0()
 
-	i.set_vol_0()
-	if i.user.vol == 0: vol_0(i)
+	if i.user.vol == 0:
+		await vol_0(i)
 
 
-def vol_0(i: GUI) -> None:
-	i.elms.ticker = ui.timer(i.vars.tick_speed, wrap(gain_xp, i.vars.xp_showing, i))
+async def vol_0(i: GUI) -> None:
+	# setup vars for vol 0
+	i.elms.xp.label.set_text('Literature:')
+	i.vars.xp_showing = 'l'
+	# if 'The Card' event has not been activated, activate in 5-10 seconds
+	if 'The Card' not in i.user.events and 'The Card' not in i.user.quests:
+		# await asyncio.sleep(random.randint(5, 10))
+		await asyncio.sleep(1)  # for debugging
+		i.new_event('The Card')
+	# if the player has not yet viewed The Card event
+	if 'The Card' in i.user.events:
+		# wait for user to click The Card event and get response
+		await i.vars.events['The Card'][1].clicked()
+		ans = await i.view_event('The Card')
+		# remove The Card event
+		i.vars.events['The Card'][0]()
+		del i.user.events['The Card']
+		# if user clicked yes
+		if ans:
+			# start vol 1
+			i.set_vol_1()
+			return
+		# if user clicked no: add The Card quest and Wu Wei insight
+		i.new_quest('The Card')
+		i.new_insight('Wu Wei')
+		await i.view_insight('Wu Wei')
+	# wait for user to click The Card quest and get response, repeat till user clicks yes
+	while True:
+		await i.vars.quests['The Card'][1].clicked()
+		ans = await i.view_quest('The Card')
+		# if user clicked yes
+		if ans:
+			# remove quest and start vol 1
+			i.vars.quests['The Card'][0]()
+			del i.user.quests['The Card']
+			return
+		# if user clicked no: close popup (do nothing)
 
 
 if __name__ in {"__main__", "__mp_main__"}:
