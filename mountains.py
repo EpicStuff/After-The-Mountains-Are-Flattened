@@ -1,3 +1,41 @@
+from functools import partial as wrap
+from nicegui import ui
+from gui import GUI, gain_xp
+
+class Task():
+	def __init__(self, i: GUI, name: str, diff: str = 'normal', rate: str = 'exp') -> None:
+		# setup vars
+		self.name, self.diff, self.rate, self.tick_speed, self.i = name, diff, rate, i.vars.tick_speed, i
+		self.xp = 0
+		self.timer = ui.timer(self.tick_speed, self.tick)
+		# create gui elements
+		with ui.row().classes('w-full flex-row flex-nowrap'):
+			ui.label(name)
+			with ui.linear_progress(size='20px', show_value=False).props('instant-feedback') as self.bar:
+				ui.label().bind_text_from(self, 'xp', int).classes('absolute-center text-sm text-white')
+			ui.label('+ 001').classes('flex-none')
+		# calculate xp required
+		self.calc_xp()
+	def calc_xp(self) -> None:
+		if self.rate == 'const':
+			if self.diff == 'easy':
+				self.xp_required = 10 / self.tick_speed
+				return
+		assert False, 'not yet implemented'
+	def tick(self) -> None:
+		'runs every tick'
+		level = int(self.xp)
+		self.xp += gain_xp(self.xp_required, self.bar)
+		# if level up
+		if int(self.xp) != level:
+			self.effect()
+			self.calc_xp()
+	def effect(self) -> None:
+		if self.name == 'Revisiting <i>Infinite Leaves</i>':
+			gain_xp(self.i.vars.xp_required['literature'], None, self.i.user.xp, 'literature')  # for debugging
+			# gain_xp(self.i.vars.xp_required['literature'], None, self.i.user.xp, 'literature', xp=5e7)
+
+
 story_0 = 'Having finally surmounted the mountain that was Saana Online, the climber may now finally retire at the age of 17 to pursue what really matters. The climb that is the all-encompassing, all-synthesizing exploration of the world of literatu—'
 events = {
 	'The Card': {
@@ -18,8 +56,8 @@ events = {
 }
 quests = {
 	'The Card': {
-		'title': 'Accept The Challenge:',
-		'text': 'The Climbers frenemy has proposed a challenge. Accept it so the story my continue.',
+		'title': 'Accept The Challenge: (tmp, probably)',
+		'text': 'The Climber\'s frenemy has proposed a challenge. Accept it so the story my continue .',
 		'buttons': ['Fine', 'Not Doing'],
 	},
 }
